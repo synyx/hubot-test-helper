@@ -1,26 +1,27 @@
-'use strict'
+import Helper from '../src/index.js';
 
-const Helper = require('../src/index');
-const helper = new Helper('./scripts/enter-leave.js');
+import { expect } from 'chai';
+import path from "path";
+import {fileURLToPath} from "url";
 
-const co     = require('co');
-const expect = require('chai').expect;
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+const helper = new Helper(path.resolve(currentDirectory, './scripts/enter-leave.js'));
 
-describe('enter-leave', function() {
-  beforeEach(function() {
-    this.room = helper.createRoom({httpd: false});
+describe('enter-leave', () => {
+  let room;
+
+  beforeEach(async () => {
+    room = await helper.createRoom();
   });
 
-  context('user entering then leaving the room', function() {
-    beforeEach(function() {
-      return co(function*() {
-        yield this.room.user.enter('user1');
-        yield this.room.user.leave('user1');
-      }.bind(this));
+  context('user entering then leaving the room', async () => {
+    beforeEach(async () => {
+      await room.user.enter('user1');
+      await room.user.leave('user1');
     });
 
-    it('greets the user', function() {
-      expect(this.room.messages).to.eql([
+    it('greets the user', () => {
+      expect(room.messages).to.eql([
         ['hubot', 'Hi user1!'],
         ['hubot', 'Bye user1!']
       ]);

@@ -1,5 +1,7 @@
 // Description:
 //   Test script
-module.exports = robot =>
-  robot.respond(/bye$/i, msg => msg.reply('bye'))
-;
+export default (robot) => {
+    robot.respond(/bye$/i, msg => {
+        msg.reply('bye');
+    });
+}

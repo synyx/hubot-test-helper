@@ -1,26 +1,27 @@
-'use strict'
+import Helper from '../src/index.js';
 
-const Helper = require('../src/index');
-const helper = new Helper(['./scripts/hello-world.js', './scripts/bye.js']);
+import { expect } from 'chai';
+import path from "path";
+import {fileURLToPath} from "url";
 
-const co     = require('co');
-const expect = require('chai').expect;
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+const helper = new Helper(['./scripts/hello-world.js', './scripts/bye.js'].map(p => path.resolve(currentDirectory, p)));
 
-describe('hello-world', function() {
-  beforeEach(function() {
-    this.room = helper.createRoom({httpd: false});
+describe('hello-world', () => {
+  let room;
+
+  beforeEach(async () => {
+    room = await helper.createRoom();
   });
 
-  context('user says hi to hubot', function() {
-    beforeEach(function() {
-      return co(function*() {
-        yield this.room.user.say('alice', '@hubot hi');
-        yield this.room.user.say('bob',   '@hubot bye');
-      }.bind(this));
+  context('user says hi to hubot', () => {
+    beforeEach(async () => {
+      await room.user.say('alice', '@hubot hi');
+      await room.user.say('bob',   '@hubot bye');
     });
 
-    it('should reply to user', function() {
-      expect(this.room.messages).to.eql([
+    it('should reply to user', () => {
+      expect(room.messages).to.eql([
         ['alice', '@hubot hi'],
         ['hubot', '@alice hi'],
         ['bob',   '@hubot bye'],

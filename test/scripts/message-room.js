@@ -1,6 +1,7 @@
 // Description:
 //   Test script
-module.exports = robot =>
-  robot.respond(/announce otherRoom: (.+)$/i, msg => {
-    robot.messageRoom('otherRoom', '@' + msg.envelope.user.name + ' says: ' + msg.match[1]);
-  })
+export default (robot) => {
+    robot.respond(/announce (.+): (.+)$/i, msg => {
+        robot.messageRoom(msg.match[1], '@' + msg.envelope.user.name + ' says: ' + msg.match[2]);
+    });
+}

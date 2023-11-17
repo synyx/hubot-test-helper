@@ -1,32 +1,39 @@
-'use strict'
+import Helper from '../src/index.js';
+import * as http from 'http';
 
-const Helper = require('../src/index');
-const helper = new Helper('./scripts');
-const http = require('http');
+import { expect } from 'chai';
+import path from "path";
+import {fileURLToPath} from "url";
 
-const expect = require('chai').expect;
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+const helper = new Helper(path.resolve(currentDirectory, './scripts/httpd-world.js'));
 
-process.env.EXPRESS_PORT = 8080;
+process.env.EXPRESS_PORT = '8080';
 
-describe('httpd-world', function() {
-  beforeEach(function() {
-    this.room = helper.createRoom();
+describe('httpd-world', () => {
+  let room;
+  let response;
+
+  beforeEach(async () => {
+    room = await helper.createRoom({httpd: true});
   });
 
-  afterEach(function() {
-    this.room.destroy();
+  afterEach(() => {
+    room.destroy();
   });
 
-  context('GET /hello/world', function() {
-    beforeEach(function(done) {
-      http.get('http://localhost:8080/hello/world', response => {
-        this.response = response;
-        done();
-      }).on('error', done);
+  context('GET /hello/world', () => {
+    beforeEach(async() => {
+      await new Promise((resolve) => {
+        http.get('http://localhost:8080/hello/world', res => {
+          response = res;
+          resolve();
+        }).on('error', resolve);
+      });
     });
 
     it('responds with status 200', function() {
-      expect(this.response.statusCode).to.equal(200);
+      expect(response.statusCode).to.equal(200);
     });
   });
 });
