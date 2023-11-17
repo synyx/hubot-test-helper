@@ -1,11 +1,11 @@
-import Helper from '../src/index.js';
+import Helper from '../src/index.mjs';
 
 import { expect } from 'chai';
 import path from "path";
 import {fileURLToPath} from "url";
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
-const helper = new Helper(['./scripts/hello-world.js', './scripts/bye.js'].map(p => path.resolve(currentDirectory, p)));
+const helper = new Helper(['./scripts/hello-world.mjs', './scripts/bye.mjs'].map(p => path.resolve(currentDirectory, p)));
 
 describe('hello-world', () => {
   let room;

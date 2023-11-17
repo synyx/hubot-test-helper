@@ -1,4 +1,4 @@
-import Helper from '../src/index.js';
+import Helper from '../src/index.mjs';
 import * as Hubot from 'hubot';
 import path from 'path';
 import { fileURLToPath } from 'url'
@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 import { expect } from 'chai';
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
-const helper = new Helper(path.resolve(currentDirectory, './scripts/custom-text-message.js'));
+const helper = new Helper(path.resolve(currentDirectory, './scripts/custom-text-message.mjs'));
 
 describe('custom-text-message', () => {
   let room;

@@ -1,11 +1,11 @@
-import Helper from '../src/index.js';
+import Helper from '../src/index.mjs';
 
 import { expect } from 'chai';
 import path from "path";
 import {fileURLToPath} from "url";
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
-const helper = new Helper(path.resolve(currentDirectory, './scripts/private-message.js'));
+const helper = new Helper(path.resolve(currentDirectory, './scripts/private-message.mjs'));
 
 describe('private-message', () => {
   let room;

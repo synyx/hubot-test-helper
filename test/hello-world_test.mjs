@@ -1,11 +1,11 @@
-import Helper from '../src/index.js';
+import Helper from '../src/index.mjs';
 
 import { expect } from 'chai';
 import path from "path";
 import {fileURLToPath} from "url";
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
-const helper = new Helper(path.resolve(currentDirectory, './scripts/hello-world-listener.js'));
+const helper = new Helper(path.resolve(currentDirectory, './scripts/hello-world.mjs'));
 
 describe('hello-world', () => {
   let room;
@@ -13,16 +13,20 @@ describe('hello-world', () => {
   beforeEach(async () => {
     room = await helper.createRoom();
   });
+  afterEach(function() {
+    room.destroy();
+  });
 
   context('user says hi to hubot', () => {
-    beforeEach(async () => {
-        await room.user.say('alice', '@hubot hi');
-        await room.user.say('bob',   '@hubot hi');
+    beforeEach(async() => {
+      await room.user.say('alice', '@hubot hi');
+      await room.user.say('bob',   '@hubot hi');
     });
 
     it('should reply to user', () => {
       expect(room.messages).to.eql([
         ['alice', '@hubot hi'],
+        ['hubot', '@alice hi'],
         ['bob',   '@hubot hi'],
         ['hubot', '@bob hi']
       ]);

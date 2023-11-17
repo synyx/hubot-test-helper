@@ -7,7 +7,6 @@
     "autotest": "mocha test -w",
     "semantic-release": "semantic-release"
   },
-  "type": "module",
   "keywords": [
     "hubot"
   ],
